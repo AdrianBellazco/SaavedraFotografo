@@ -1,0 +1,46 @@
+h2 {
+    font-family: 'Playfair Display', serif;
+  }
+
+  .adricard{
+     min-height: 600px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+     border-radius: 1rem;
+  box-shadow: inset 0 0 0 6px white; /* borde blanco */
+  overflow: hidden; /* IMPORTANTE para mantener el borde limpio */
+
+    position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  
+  }
+
+.adricard::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: inherit;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: transform 0.5s ease;
+  transform: scale(1);
+  z-index: 0;
+}
+
+.adricard:hover::before {
+  transform: scale(1.08); /* Zoom leve */
+}
+
+.adricard h2 {
+  position: relative;
+  z-index: 1;
+}
