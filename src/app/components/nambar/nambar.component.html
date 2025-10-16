@@ -1,36 +1,42 @@
 <body class="bg-black text-white">
-  <div class="container">
- <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-transparent">
-  <div class="container ">
-    <!-- Título a la izquierda -->
-    <img src="/assets/adrian.png" width="120px" class="logo  py-2"/>
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-transparent">
+    <div class="container d-flex justify-content-between align-items-center">
 
-    <!-- Botones a la derecha -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto"> <!-- ms-auto empuja los items a la derecha -->
-        <li class="nav-item me-2">
-          <a class="nav-link active " href="#">Home</a>
-        </li>
-        <li class="nav-item me-2">
-          <a class="nav-link" href="#">Features</a>
-        </li>
-        <li class="nav-item me-2">
-          <a class="nav-link" href="#">Pricing</a>
-        </li>
-        <li class="nav-item me-2">
-          <a class="nav-link disabled">Disabled</a>
-        </li>
-      </ul>
+      <!-- LOGO IZQUIERDA -->
+      <img src="/assets/adrian.png" width="120px" class="logo py-2" />
+
+      <!-- BOTÓN TOGGLER -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- ENLACES CENTRADOS -->
+      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item me-3">
+            <a class="nav-link active" href="#">Inicio</a>
+          </li>
+          <li class="nav-item me-3">
+            <a class="nav-link" href="#">Servicios</a>
+          </li>
+          <li class="nav-item me-3">
+            <a class="nav-link" href="#">Trayectoria</a>
+          </li>
+          <li class="nav-item me-3">
+            <a class="nav-link">Nosotros como empresa</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- ICONO USUARIO DERECHA -->
+      <div class="user-menu position-relative">
+        <i class="bi bi-person-circle fs-4"></i>
+       <ul class="dropdown-menu-custom">
+  <li><a routerLink="/login">Registro</a></li>
+ <!-- <li><a routerLink="/registro"></a></li>-->
+        </ul>
+      </div>
+
     </div>
-  </div>
- </nav>
-
-</div>
-
-
-
+  </nav>
 </body>

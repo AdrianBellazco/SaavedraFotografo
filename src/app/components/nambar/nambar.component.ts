@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-nambar',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './nambar.component.html',
-  styleUrl: './nambar.component.css'
+  styleUrls: ['./nambar.component.css'],
 })
-export class NambarComponent {
-
-}
+export class NambarComponent {}

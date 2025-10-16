@@ -1,0 +1,41 @@
+<input type="checkbox" id="toggle" hidden />
+
+<div class="container">
+  <!-- Registro -->
+  <div class="form-container sign-up-container">
+    <form (ngSubmit)="registrar()">
+      <h1>Crear Cuenta</h1>
+      <input type="text" placeholder="Nombre" [(ngModel)]="nombre" name="nombreRegistro" required />
+<input type="email" placeholder="Correo" [(ngModel)]="email" name="emailRegistro" required />
+<input type="password" placeholder="Contraseña" [(ngModel)]="password" name="passwordRegistro" required />
+      <button type="submit">Registrarse</button>
+      <p [ngStyle]="{'color': esError ? 'red' : 'green'}">{{ mensaje }}</p>
+    </form>
+  </div>
+
+  <!-- Inicio de Sesión -->
+  <div class="form-container sign-in-container">
+    <form (ngSubmit)="iniciarSesion()">
+      <h1>Iniciar Sesión</h1>
+     <input type="email" placeholder="Correo" [(ngModel)]="email" name="emailLogin" required />
+<input type="password" placeholder="Contraseña" [(ngModel)]="password" name="passwordLogin" required />
+      <button type="submit">Iniciar Sesión</button>
+      <p [ngStyle]="{'color': esError ? 'red' : 'green'}">{{ mensaje }}</p>
+    </form>
+  </div>
+
+  <!-- Overlay -->
+  <div class="overlay-container">
+    <div class="overlay">
+      <div class="overlay-panel overlay-left">
+        <h1>Bienvenido!</h1>
+        <label for="toggle" class="ghost">Iniciar Sesión</label>
+      </div>
+      <div class="overlay-panel overlay-right">
+        <h1>Hola amigo!</h1>
+        <p>Conoce nuestros servicios y ventajas al registrarte!</p>
+        <label for="toggle" class="ghost">Registrarse</label>
+      </div>
+    </div>
+  </div>
+</div>
