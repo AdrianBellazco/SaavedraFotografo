@@ -22,6 +22,24 @@
     <button type="submit">Iniciar Sesión</button>
     <p [ngStyle]="{'color': esError ? 'red' : 'green'}">{{ mensaje }}</p>
   </form>
+  <!-- Botón de inicio de sesión con Google -->
+<div id="g_id_onload"
+     data-client_id="93749196415-2eoqil4aj521nvbou6u714cqa1icv5gi.apps.googleusercontent.com"
+     data-context="signin"
+     data-ux_mode="popup"
+     data-callback="handleCredentialResponse"
+     data-auto_prompt="false">
+</div>
+
+<div class="g_id_signin"
+     data-type="standard"
+     data-shape="pill"
+     data-theme="outline"
+     data-text="signin_with"
+     data-size="large"
+     data-logo_alignment="left">
+</div>
+
 </div>
 
 
