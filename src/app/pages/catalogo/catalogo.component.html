@@ -1,0 +1,32 @@
+<div class="catalogo-container">
+  <h1 class="titulo">Catálogo de Servicios</h1>
+  <p class="subtitulo">Explora nuestros servicios audiovisuales y de fotografía profesional</p>
+
+  <div class="grid-servicios">
+    <div
+      class="card-servicio"
+      *ngFor="let servicio of servicios"
+      (click)="abrirModal(servicio)"
+    >
+      <div
+        class="card-img"
+        [style.backgroundImage]="'url(' + servicio.imagen + ')'"
+      ></div>
+      <div class="card-content">
+        <h3>{{ servicio.titulo }}</h3>
+        <p>{{ servicio.descripcion }}</p>
+        <button>Ver más</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DETALLES -->
+  <div class="modal-overlay" *ngIf="servicioSeleccionado">
+    <div class="modal-contenido">
+      <button class="cerrar-modal" (click)="cerrarModal()">✕</button>
+      <h2>{{ servicioSeleccionado.titulo }}</h2>
+      <img [src]="servicioSeleccionado.imagen" alt="{{ servicioSeleccionado.titulo }}" />
+      <p>{{ servicioSeleccionado.detalle }}</p>
+    </div>
+  </div>
+</div>

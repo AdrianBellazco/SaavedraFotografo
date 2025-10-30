@@ -20,4 +20,11 @@ export const routes: Routes = [
         (m) => m.IniciarSesionComponent
       ),
   },
+  {
+    path: 'catalogo',
+    loadComponent: () =>
+      import('./pages/catalogo/catalogo.component').then(
+        (m) => m.CatalogoComponent
+      ),
+  },
 ];
