@@ -1,0 +1,24 @@
+<div class="chat-ia-button" (click)="toggleChat()">
+  <img src="assets/chatbot.png" alt="Chat IA" class="chat-ia-icon" />
+</div>
+
+<div *ngIf="mostrarChat" class="chat-ia-window">
+  <div class="header">Chat IA - Lumix</div>
+
+  <div class="log">
+    <div *ngFor="let m of messages" class="bubble" [class.user]="m.role==='user'" [class.bot]="m.role==='assistant'">
+      <div class="sender" *ngIf="m.role!=='system'">{{ m.role==='user' ? 'Tú' : 'Asistente' }}</div>
+      <div class="text">{{ m.content }}</div>
+    </div>
+
+    <div class="bubble bot" *ngIf="loading">
+      <div class="sender">Asistente</div>
+      <div class="text">Pensando…</div>
+    </div>
+  </div>
+
+  <form class="composer" (ngSubmit)="send()">
+    <input [(ngModel)]="input" name="msg" type="text" placeholder="Pide ideas de sesión, analiza un cliente, clasifica estilos…" autocomplete="off"/>
+    <button type="submit" [disabled]="loading || !input.trim()">➤</button>
+  </form>
+</div>
