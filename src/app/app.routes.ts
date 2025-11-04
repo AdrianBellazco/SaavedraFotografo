@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { ClientAnalyzerComponent } from './components/client-analyzer/client-analyzer.component';
+import { ChatIaComponent } from './components/chat-ia/chat-ia.component';
 
 export const routes: Routes = [
   {
@@ -20,4 +22,11 @@ export const routes: Routes = [
         (m) => m.IniciarSesionComponent
       ),
   },
+  
+  { path: 'analizador', component: ClientAnalyzerComponent },
+
+  { path: '', redirectTo: 'analizador', pathMatch: 'full' },
+
+  { path: '', component: ChatIaComponent }, 
+  { path: '**', redirectTo: '' }
 ];

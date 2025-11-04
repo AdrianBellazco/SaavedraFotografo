@@ -1,3 +1,5 @@
+// ==== Tipos base compartidos por TODO el proyecto ====
+
 export type AiRole = 'system' | 'user' | 'assistant' | 'tool';
 
 export interface AiMessage {
@@ -28,10 +30,22 @@ export interface AiUsage {
 }
 
 export interface AiResponse {
-  id: string;
-  object: 'chat.completion';
-  model: string;
+  id?: string;
+  object?: 'chat.completion';
+  model?: string;
   created?: number;
-  choices: AiChoiceNonStreaming[];
+  choices?: AiChoiceNonStreaming[];
   usage?: AiUsage;
+  error?: any;
 }
+
+// ==== Resultado del Analizador ====
+export interface AnalyzeClientResult {
+  tipoSesion: string;
+  locaciones: string[];
+  vestuario: string[];
+  estilo: string;
+  lente: string;
+}
+
+export type AnalyzeClientSafe = AnalyzeClientResult | { texto: string };

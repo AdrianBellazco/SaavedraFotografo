@@ -6,6 +6,8 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
+
+// CORS: permite cualquier puerto localhost (Angular cambia de puerto a veces)
 app.use(cors({ origin: [/^http:\/\/localhost:\d+$/] }));
 
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
@@ -15,8 +17,15 @@ if (!OPENROUTER_API_KEY) {
   console.warn('[WARN] Falta OPENROUTER_API_KEY en .env');
 }
 
+// Healthcheck rápido
+app.get('/api/ai/health', (_req, res) => {
+  res.json({ ok: true, hasKey: !!OPENROUTER_API_KEY });
+});
+
+// Proxy principal
 app.post('/api/ai/chat', async (req, res) => {
-  const isStream = !!req.body?.stream; // false = sin streaming (lo que queremos)
+  const isStream = !!req.body?.stream;
+  console.log('➡️  /api/ai/chat recibido. stream:', isStream, 'model:', req.body?.model);
 
   try {
     const upstream = await fetch(`${API_BASE}/chat/completions`, {
@@ -30,13 +39,15 @@ app.post('/api/ai/chat', async (req, res) => {
       body: JSON.stringify(req.body)
     });
 
+    console.log('⬅️  Respuesta OpenRouter:', upstream.status, upstream.statusText);
+
     if (!isStream) {
       const text = await upstream.text();
       res.status(upstream.status).send(text);
       return;
     }
 
-    // (Maneja streaming si algún día lo activas)
+    // (streaming, por si luego lo reactivas)
     res.status(200);
     res.setHeader('Content-Type', 'text/event-stream; charset=utf-8');
     res.setHeader('Cache-Control', 'no-cache, no-transform');
