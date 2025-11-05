@@ -1,11 +1,33 @@
 <div class="catalogo-container">
   <h1 class="titulo">Catálogo de Servicios</h1>
-  <p class="subtitulo">Explora nuestros servicios audiovisuales y de fotografía profesional</p>
+  <p class="subtitulo">BODAS</p>
 
-  <div class="grid-servicios">
+  <div class="grid-servicios boda">
     <div
       class="card-servicio"
-      *ngFor="let servicio of servicios"
+      *ngFor="let servicio of boda"
+      (click)="abrirModal(servicio)"
+    >
+      <div
+        class="card-img"
+        [style.backgroundImage]="'url(' + servicio.imagen + ')'"
+      ></div>
+      <div class="card-content">
+        <h3>{{ servicio.titulo }}</h3>
+        <p>{{ servicio.descripcion }}</p>
+        <button>Ver más</button>
+      </div>
+    </div>
+  </div>
+ <p class="subtitulo"> </p>
+  <p class="subtitulo"> </p>
+   <p class="subtitulo"> </p>
+    <p class="subtitulo"> QUINCES</p>
+
+   <div class="grid-servicios quinces">
+    <div
+      class="card-servicio"
+      *ngFor="let servicio of quinces"
       (click)="abrirModal(servicio)"
     >
       <div
@@ -27,6 +49,9 @@
       <h2>{{ servicioSeleccionado.titulo }}</h2>
       <img [src]="servicioSeleccionado.imagen" alt="{{ servicioSeleccionado.titulo }}" />
       <p>{{ servicioSeleccionado.detalle }}</p>
+       <button>
+<i class="bi bi-bag-heart">   Añadir al carrito</i>
+</button>
     </div>
   </div>
 </div>
