@@ -1,0 +1,31 @@
+<!-- 
+<div class="carrito-container">
+<h1 class="titulo">Tu Carrito de Compras</h1>
+<div class="resumen-compra">
+<p class="total">Total: <span>${{ total | number:'1.2-2' }}</span></p>
+<button class="btn-comprar-todo">Comprar Todo</button>
+</div>
+
+
+<div class="lista-carrito">
+<div class="item-carrito" *ngFor="let item of carrito">
+<div class="item-img" [style.backgroundImage]="'url(' + item.imagen + ')'"> </div>
+<div class="item-info">
+<h3>{{ item.nombre }}</h3>
+<p>{{ item.descripcion }}</p>
+<p class="precio">${{ item.precio | number:'1.2-2' }}</p>
+</div>
+<div class="item-botones">
+<button class="btn-comprar" (click)="comprarItem(item)">Comprar</button>
+<button class="btn-quitar" (click)="eliminarItem(item)">Quitar</button>
+</div>
+</div>
+
+
+<div class="vacio" *ngIf="carrito.length === 0">
+<p>Tu carrito está vacío 😢</p>
+<a routerLink="/catalogo" class="volver">Volver al catálogo</a>
+</div>
+</div>
+</div>
+-->

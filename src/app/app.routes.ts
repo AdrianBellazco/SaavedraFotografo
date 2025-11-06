@@ -4,7 +4,9 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('./pages/inicio/inicio.component').then((m) => m.InicioComponent),
+      import('./pages/inicio/inicio.component').then(
+        (m) => m.InicioComponent
+      ),
   },
   {
     path: 'registro',
@@ -25,6 +27,13 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/catalogo/catalogo.component').then(
         (m) => m.CatalogoComponent
+      ),
+  },
+  {
+    path: 'carrito',
+    loadComponent: () =>
+      import('./pages/carrito/carrito.component').then(
+        (m) => m.CarritoComponent
       ),
   },
 ];
