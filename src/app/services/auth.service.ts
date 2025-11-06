@@ -59,4 +59,40 @@ register(user: any): Observable<any> {
   isAuthenticated(): boolean {
     return this.isLoggedInSubject.value;
   }
+
+
+
+  // ===========================================================
+  // 🧠 NUEVAS FUNCIONALIDADES PARA REDIRECCIÓN AUTOMÁTICA
+  // ===========================================================
+
+  // Guarda la ruta y servicio donde el usuario estaba antes de ir al login
+  setPendingRedirect(url: string, servicio?: any): void {
+    localStorage.setItem('returnUrl', url);
+    if (servicio) {
+      localStorage.setItem('pendingService', JSON.stringify(servicio));
+    }
+  }
+
+  // Obtiene la ruta de retorno
+  getReturnUrl(): string {
+    return localStorage.getItem('returnUrl') || '/catalogo';
+  }
+
+  // Obtiene el servicio pendiente (si había)
+  getPendingService(): any | null {
+    const item = localStorage.getItem('pendingService');
+    return item ? JSON.parse(item) : null;
+  }
+
+  // Limpia los datos de redirección
+  clearPendingRedirect(): void {
+    localStorage.removeItem('returnUrl');
+    localStorage.removeItem('pendingService');
+  }
 }
+
+
+
+
+

@@ -1,4 +1,3 @@
-<!-- 
 <div class="carrito-container">
 <h1 class="titulo">Tu Carrito de Compras</h1>
 <div class="resumen-compra">
@@ -11,7 +10,7 @@
 <div class="item-carrito" *ngFor="let item of carrito">
 <div class="item-img" [style.backgroundImage]="'url(' + item.imagen + ')'"> </div>
 <div class="item-info">
-<h3>{{ item.nombre }}</h3>
+<h3>{{ item.titulo }}</h3>
 <p>{{ item.descripcion }}</p>
 <p class="precio">${{ item.precio | number:'1.2-2' }}</p>
 </div>
@@ -28,4 +27,5 @@
 </div>
 </div>
 </div>
+<!-- 
 -->

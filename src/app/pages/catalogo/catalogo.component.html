@@ -1,57 +1,188 @@
-<div class="catalogo-container">
-  <h1 class="titulo">Catálogo de Servicios</h1>
-  <p class="subtitulo">BODAS</p>
+<div class="catalogo">
+  <div class="container">
+    
+    <h1 class="titulo"> <br> CATÁLOGO DE SERVICIOS</h1>
 
-  <div class="grid-servicios boda">
-    <div
-      class="card-servicio"
-      *ngFor="let servicio of boda"
-      (click)="abrirModal(servicio)"
-    >
-      <div
-        class="card-img"
-        [style.backgroundImage]="'url(' + servicio.imagen + ')'"
-      ></div>
-      <div class="card-content">
-        <h3>{{ servicio.titulo }}</h3>
-        <p>{{ servicio.descripcion }}</p>
-        <button>Ver más</button>
-      </div>
-    </div>
+    <!-- ================= BODAS • POR FOTOS ================= -->
+    <h2 class="subtitulo">BODAS · POR CANTIDAD DE FOTOS (SIN PHOTOBOOK)</h2>
+    <section class="grid-servicios">
+      <article class="card-servicio" *ngFor="let s of bodasPorFotosSinBook" (click)="abrirModal(s)">
+        <div class="card-img" [style.backgroundImage]="'url(' + s.imagen + ')'"></div>
+        <div class="card-content">
+          <h3>{{ s.titulo }}</h3>
+          <p>{{ s.descripcion }}</p>
+          <button class="btn-pill" type="button">Ver más</button>
+        </div>
+      </article>
+    </section>
+
+    <h3 class="subtitulo subtitulo-menor">BODAS · PROMOCIÓN SOLO DIGITALES</h3>
+    <section class="grid-servicios">
+      <article class="card-servicio" *ngFor="let s of bodasPromosDigitales" (click)="abrirModal(s)">
+        <div class="card-img" [style.backgroundImage]="'url(' + s.imagen + ')'"></div>
+        <div class="card-content">
+          <h3>{{ s.titulo }}</h3>
+          <p>{{ s.descripcion }}</p>
+          <button class="btn-pill" type="button">Ver más</button>
+        </div>
+      </article>
+    </section>
+
+    <h3 class="subtitulo subtitulo-menor">BODAS · POR CANTIDAD DE FOTOS (CON PHOTOBOOK)</h3>
+    <section class="grid-servicios">
+      <article class="card-servicio" *ngFor="let s of bodasPorFotosConBook" (click)="abrirModal(s)">
+        <div class="card-img" [style.backgroundImage]="'url(' + s.imagen + ')'"></div>
+        <div class="card-content">
+          <h3>{{ s.titulo }}</h3>
+          <p>{{ s.descripcion }}</p>
+          <button class="btn-pill" type="button">Ver más</button>
+        </div>
+      </article>
+    </section>
+
+    <!-- ================= BODAS • POR HORAS ================= -->
+    <h2 class="subtitulo">BODAS · POR CANTIDAD DE HORAS (SIN PHOTOBOOK)</h2>
+    <section class="grid-servicios">
+      <article class="card-servicio" *ngFor="let s of bodasPorHorasSinBook" (click)="abrirModal(s)">
+        <div class="card-img" [style.backgroundImage]="'url(' + s.imagen + ')'"></div>
+        <div class="card-content">
+          <h3>{{ s.titulo }}</h3>
+          <p>{{ s.descripcion }}</p>
+          <button class="btn-pill" type="button">Ver más</button>
+        </div>
+      </article>
+    </section>
+
+    <h3 class="subtitulo subtitulo-menor">BODAS · POR CANTIDAD DE HORAS (CON PHOTOBOOK)</h3>
+    <section class="grid-servicios">
+      <article class="card-servicio" *ngFor="let s of bodasPorHorasConBook" (click)="abrirModal(s)">
+        <div class="card-img" [style.backgroundImage]="'url(' + s.imagen + ')'"></div>
+        <div class="card-content">
+          <h3>{{ s.titulo }}</h3>
+          <p>{{ s.descripcion }}</p>
+          <button class="btn-pill" type="button">Ver más</button>
+        </div>
+      </article>
+    </section>
+
+    <h3 class="subtitulo subtitulo-menor">EXTRAS (BODAS)</h3>
+    <section class="grid-servicios">
+      <article class="card-servicio" *ngFor="let s of extrasEvento" (click)="abrirModal(s)">
+        <div class="card-img" [style.backgroundImage]="'url(' + s.imagen + ')'"></div>
+        <div class="card-content">
+          <h3>{{ s.titulo }}</h3>
+          <p>{{ s.descripcion }}</p>
+          <button class="btn-pill" type="button">Ver más</button>
+        </div>
+      </article>
+    </section>
+
+    <!-- ================= QUINCES & PRE-QUINCE • POR FOTOS ================= -->
+    <h2 class="subtitulo">QUINCES Y PRE-QUINCES · POR CANTIDAD DE FOTOS (SIN PHOTOBOOK)</h2>
+    <section class="grid-servicios">
+      <article class="card-servicio" *ngFor="let s of quincesPorFotosSinBook" (click)="abrirModal(s)">
+        <div class="card-img" [style.backgroundImage]="'url(' + s.imagen + ')'"></div>
+        <div class="card-content">
+          <h3>{{ s.titulo }}</h3>
+          <p>{{ s.descripcion }}</p>
+          <button class="btn-pill" type="button">Ver más</button>
+        </div>
+      </article>
+    </section>
+
+    <h3 class="subtitulo subtitulo-menor">QUINCES Y PRE-QUINCES · PROMOCIÓN SOLO DIGITALES</h3>
+    <section class="grid-servicios">
+      <article class="card-servicio" *ngFor="let s of quincesPromosDigitales" (click)="abrirModal(s)">
+        <div class="card-img" [style.backgroundImage]="'url(' + s.imagen + ')'"></div>
+        <div class="card-content">
+          <h3>{{ s.titulo }}</h3>
+          <p>{{ s.descripcion }}</p>
+          <button class="btn-pill" type="button">Ver más</button>
+        </div>
+      </article>
+    </section>
+
+    <h3 class="subtitulo subtitulo-menor">QUINCES Y PRE-QUINCES · POR CANTIDAD DE FOTOS (CON PHOTOBOOK)</h3>
+    <section class="grid-servicios">
+      <article class="card-servicio" *ngFor="let s of quincesPorFotosConBook" (click)="abrirModal(s)">
+        <div class="card-img" [style.backgroundImage]="'url(' + s.imagen + ')'"></div>
+        <div class="card-content">
+          <h3>{{ s.titulo }}</h3>
+          <p>{{ s.descripcion }}</p>
+          <button class="btn-pill" type="button">Ver más</button>
+        </div>
+      </article>
+    </section>
+
+    <!-- ================= QUINCES & PRE-QUINCE • POR HORAS ================= -->
+    <h2 class="subtitulo">PRE-QUINCE Y QUINCES · POR CANTIDAD DE HORAS (SIN PHOTOBOOK)</h2>
+    <section class="grid-servicios">
+      <article class="card-servicio" *ngFor="let s of quincesPorHorasSinBook" (click)="abrirModal(s)">
+        <div class="card-img" [style.backgroundImage]="'url(' + s.imagen + ')'"></div>
+        <div class="card-content">
+          <h3>{{ s.titulo }}</h3>
+          <p>{{ s.descripcion }}</p>
+          <button class="btn-pill" type="button">Ver más</button>
+        </div>
+      </article>
+    </section>
+
+    <h3 class="subtitulo subtitulo-menor">PRE-QUINCE Y QUINCES · POR CANTIDAD DE HORAS (CON PHOTOBOOK)</h3>
+    <section class="grid-servicios">
+      <article class="card-servicio" *ngFor="let s of quincesPorHorasConBook" (click)="abrirModal(s)">
+        <div class="card-img" [style.backgroundImage]="'url(' + s.imagen + ')'"></div>
+        <div class="card-content">
+          <h3>{{ s.titulo }}</h3>
+          <p>{{ s.descripcion }}</p>
+          <button class="btn-pill" type="button">Ver más</button>
+        </div>
+      </article>
+    </section>
+
+    <!-- ================= ESTUDIO DE PRODUCTOS ================= -->
+    <h2 class="subtitulo">ESTUDIO DE PRODUCTOS</h2>
+    <section class="grid-servicios">
+      <article class="card-servicio" *ngFor="let s of estudioProducto" (click)="abrirModal(s)">
+        <div class="card-img" [style.backgroundImage]="'url(' + s.imagen + ')'"></div>
+        <div class="card-content">
+          <h3>{{ s.titulo }}</h3>
+          <p>{{ s.descripcion }}</p>
+          <button class="btn-pill" type="button">Ver más</button>
+        </div>
+      </article>
+    </section>
+
+    <!-- ================= ESTUDIO PERSONALES / FAMILIARES ================= -->
+    <h2 class="subtitulo">ESTUDIO PERSONALES · FAMILIARES</h2>
+    <section class="grid-servicios">
+      <article class="card-servicio" *ngFor="let s of estudioFamiliar" (click)="abrirModal(s)">
+        <div class="card-img" [style.backgroundImage]="'url(' + s.imagen + ')'"></div>
+        <div class="card-content">
+          <h3>{{ s.titulo }}</h3>
+          <p>{{ s.descripcion }}</p>
+          <button class="btn-pill" type="button">Ver más</button>
+        </div>
+      </article>
+    </section>
   </div>
- <p class="subtitulo"> </p>
-  <p class="subtitulo"> </p>
-   <p class="subtitulo"> </p>
-    <p class="subtitulo"> QUINCES</p>
 
-   <div class="grid-servicios quinces">
-    <div
-      class="card-servicio"
-      *ngFor="let servicio of quinces"
-      (click)="abrirModal(servicio)"
-    >
-      <div
-        class="card-img"
-        [style.backgroundImage]="'url(' + servicio.imagen + ')'"
-      ></div>
-      <div class="card-content">
-        <h3>{{ servicio.titulo }}</h3>
-        <p>{{ servicio.descripcion }}</p>
-        <button>Ver más</button>
+  <!-- =============== MODAL =============== -->
+  <div class="modal-overlay" *ngIf="modalAbierto" (click)="cerrarModal()">
+    <article class="modal-contenido" (click)="$event.stopPropagation()">
+      <button class="modal-close" type="button" (click)="cerrarModal()">✕</button>
+
+      <img class="modal-img" [src]="servicioSeleccionado?.imagen" [alt]="servicioSeleccionado?.titulo" />
+      <h3 class="modal-titulo">{{ servicioSeleccionado?.titulo }}</h3>
+
+      <pre class="modal-desc">{{ servicioSeleccionado?.detalle }}</pre>
+
+      <div class="modal-precio" *ngIf="servicioSeleccionado?.precio">
+        $ {{ servicioSeleccionado?.precio | number:'1.0-0' }}
       </div>
-    </div>
-  </div>
 
-  <!-- MODAL DETALLES -->
-  <div class="modal-overlay" *ngIf="servicioSeleccionado">
-    <div class="modal-contenido">
-      <button class="cerrar-modal" (click)="cerrarModal()">✕</button>
-      <h2>{{ servicioSeleccionado.titulo }}</h2>
-      <img [src]="servicioSeleccionado.imagen" alt="{{ servicioSeleccionado.titulo }}" />
-      <p>{{ servicioSeleccionado.detalle }}</p>
-       <button>
-<i class="bi bi-bag-heart">   Añadir al carrito</i>
-</button>
-    </div>
+      <button class="btn-pill btn-cart" type="button" (click)="agregarAlCarrito(servicioSeleccionado!)">
+        <i class="bi bi-bag-heart me-2"></i> Añadir al carrito
+      </button>
+    </article>
   </div>
 </div>

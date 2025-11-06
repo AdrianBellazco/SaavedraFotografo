@@ -68,43 +68,60 @@ export class IniciarSesionComponent implements AfterViewInit {
     this.mensaje = 'Inicio de sesión con Google exitoso.';
     this.esError = false;
 
-    // 👉 Redirigir al catálogo tras login de Google
-    this.router.navigate(['/catalogo']);
+    this.redirigirDespuesDeLogin();
   }
 
   // =====================================================
   // REGISTRO MANUAL
   // =====================================================
-registrar() {
-  this.authService.register(this.registro).subscribe({
-    next: () => {
-      this.mensaje = 'Usuario registrado correctamente.';
-      this.esError = false;
+  registrar() {
+    this.authService.register(this.registro).subscribe({
+      next: () => {
+        this.mensaje = 'Usuario registrado correctamente.';
+        this.esError = false;
+        this.redirigirDespuesDeLogin();
+      },
+      error: () => {
+        this.mensaje = 'Ocurrió un error al registrar.';
+        this.esError = true;
+      }
+    });
+  }
 
-      // ✅ Redirigir al catálogo y activar opciones de usuario
-      this.router.navigate(['/catalogo']);
-    },
-    error: () => {
-      this.mensaje = 'Ocurrió un error al registrar.';
-      this.esError = true;
+  // =====================================================
+  // LOGIN MANUAL
+  // =====================================================
+  iniciarSesion() {
+    this.authService.login(this.login).subscribe({
+      next: () => {
+        this.mensaje = 'Inicio de sesión exitoso.';
+        this.esError = false;
+        this.redirigirDespuesDeLogin();
+      },
+      error: () => {
+        this.mensaje = 'Correo o contraseña incorrectos.';
+        this.esError = true;
+      }
+    });
+  }
+
+  // =====================================================
+  // 🔁 REDIRECCIÓN DESPUÉS DE LOGIN / REGISTRO
+  // =====================================================
+  private redirigirDespuesDeLogin() {
+    const returnUrl = this.authService.getReturnUrl();
+    const servicioPendiente = this.authService.getPendingService();
+
+    // Limpia datos temporales
+    this.authService.clearPendingRedirect();
+
+    // Si había un servicio pendiente, podrías guardarlo en un servicio global
+    if (servicioPendiente) {
+      console.log('🔁 Servicio pendiente:', servicioPendiente);
+      // Más adelante aquí reabriremos el modal del servicio en catálogo
     }
-  });
-}
 
-
-iniciarSesion() {
-  this.authService.login(this.login).subscribe({
-    next: () => {
-      this.mensaje = 'Inicio de sesión exitoso.';
-      this.esError = false;
-
-      // ✅ Redirigir al catálogo
-      this.router.navigate(['/catalogo']);
-    },
-    error: () => {
-      this.mensaje = 'Correo o contraseña incorrectos.';
-      this.esError = true;
-    }
-  });
-};
+    // Redirige al usuario a donde estaba
+    this.router.navigateByUrl(returnUrl || '/catalogo');
+  }
 }
