@@ -24,7 +24,7 @@
       type="text"
       [(ngModel)]="input"
       [disabled]="loading"
-      placeholder="Escribe tu idea o usa /modo ventas · /modo asesor · /personalidad romantico|editorial|comercial|neutral · /reset"
+      placeholder="Habla con Lumi..."
       (keyup.enter)="send()"
     />
     <button type="button" class="send" (click)="send()" [disabled]="loading" aria-label="Enviar">➤</button>
