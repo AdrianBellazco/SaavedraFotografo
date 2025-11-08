@@ -1,8 +1,9 @@
 /* ============================================================================
- * ai.config.ts (versión tolerante de firma)
+ * ai.config.ts (versión tolerante de firma + formato modo cliente)
  * Construye el "system prompt" de Lumi con el catálogo actualizado.
- * Acepta llamadas antiguas como buildSystemPrompt(this.modo, this.persona)
- * y las ignora con seguridad (usa BRAND y PAQUETES por defecto).
+ * - Acepta llamadas antiguas como buildSystemPrompt(this.modo, this.persona)
+ *   y las ignora con seguridad (usa BRAND y PAQUETES por defecto).
+ * - Fija un formato de respuesta limpio para cliente (NO mostrar ID).
  * ========================================================================== */
 
 import { BRAND } from './brand.config';
@@ -27,7 +28,7 @@ function fmtCOP(value: number | undefined): string {
 /** Serializa un paquete al objeto que verá el modelo */
 function serializePaquete(p: Paquete): any {
   const base: any = {
-    id: p.id,
+    id: p.id, // Se incluye en el catálogo para uso interno del modelo, pero NO se muestra al cliente
     nombre: p.nombre,
     categoria: p.categoria,
     modalidad: p.modalidad, // 'por_fotos' | 'por_horas'
@@ -177,13 +178,22 @@ ${buildEstrategiasResumen()}
 ### Catálogo (estructurado)
 ${JSON.stringify(catalogo, null, 2)}
 
-### Instrucciones de respuesta
-- Pregunta lo mínimo necesario si falta información crítica (horas, tomas, photobook sí/no, presupuesto).
-- Ofrece entre 1 y 3 opciones ordenadas por ajuste (requisito → presupuesto → valor agregado).
-- Para cada opción incluye: Nombre, ID, modalidad (por horas/fotos), horas o tomas, photobook sí/no, precio, "incluye", y regalos/notas relevantes.
-- Si una opción excede levemente el presupuesto (≤ 5%), puedes señalarla como "estirar presupuesto".
-- NUNCA inventes paquetes fuera del catálogo. Si algo no existe, dilo con claridad.
-- Sé breve y claro, usa listas o tablas cuando el usuario lo pida o cuando facilite la lectura.
+### Instrucciones de respuesta (FORMATO PREMIUM SAAVEDRA)
+- No muestres el campo “ID”.
+- Presenta el título con negrilla y un estilo balanceado:
+  **📸 [Nombre del paquete] — [Precio]**
+- Salta una línea y usa una estructura visual limpia:
+  • **Horas/Tomas:** [valor]  
+  • **Photobook:** Sí / No  
+  • **Incluye:**  
+    - Detalla cada elemento en subviñetas con frases breves.  
+  • **Extras (si aplica):** regalos o notas relevantes.  
+- No pongas palabras como “Nota:” o “Extra:” si no aportan valor; usa frases naturales.
+- Al final, añade una línea con:
+  **✨ ¿Por qué encaja?** [una frase cálida de cierre, máximo 20 palabras].
+- Mantén un tono profesional, amable y elegante.
+- No uses tablas ni emojis adicionales (solo el 📸 y ✨ del encabezado y cierre).
+- Usa saltos de línea naturales y evita bloques densos.
   `;
   return normalize(prompt);
 }
