@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .chat-ia-button{position:fixed;bottom:25px;right:25px;width:65px;height:65px;border-radius:50%;background:#1db954;box-shadow:0 4px 12px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:9999}
 .chat-ia-icon{width:40px;height:40px;filter:brightness(0) invert(1)}
 .chat-ia-window{position:fixed;bottom:100px;right:25px;width:360px;height:520px;background:#121212;color:#fff;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.4);display:flex;flex-direction:column;overflow:hidden;z-index:9998}
@@ -11,3 +12,125 @@
 .composer input{border:none;padding:10px;border-radius:8px;outline:none;background:#1e1e1e;color:#fff}
 .composer button{border:none;background:#00e0b8;color:#121212;padding:0 16px;border-radius:8px;cursor:pointer;font-weight:700}
 .composer button:disabled{opacity:.5;cursor:not-allowed}
+=======
+/* src/app/components/chat-ia/chat-ia.component.css */
+:host { position: relative; display: block; }
+
+/* Ventana */
+.chat-ia-window {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  width: 360px;
+  max-height: 70vh;
+  background: #111;
+  color: #f3f3f3;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.45);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1000;
+  border: 1px solid rgba(255,255,255,.08);
+  font-family: inherit;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  padding: .75rem 1rem;
+  background: #181818;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.title { margin: 0; font-size: 0.95rem; font-weight: 600; }
+.toggle {
+  background: #2a2a2a; color: #eee; border: 1px solid rgba(255,255,255,.12);
+  border-radius: 8px; width: 32px; height: 28px; cursor: pointer;
+}
+
+/* Log */
+.log {
+  padding: 0.75rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  scrollbar-width: thin;
+  max-height: calc(70vh - 120px);
+}
+
+/* Mensajes */
+.msg { display: flex; width: 100%; opacity: 0; transform: translateY(8px); animation: fadeUp .25s ease forwards; }
+.msg.user { justify-content: flex-end; }
+.msg.assistant { justify-content: flex-start; }
+
+@keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+.bubble {
+  max-width: 85%;
+  padding: 0.6rem 0.8rem;
+  border-radius: 14px;
+  line-height: 1.35;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+.msg.assistant .bubble {
+  background: #1f1f1f;
+  border: 1px solid rgba(255,255,255,.06);
+}
+.msg.user .bubble {
+  background: #2b4cff; color: white; border: 1px solid rgba(255,255,255,.1);
+}
+
+/* Indicador "escribiendo…" */
+.bubble.typing { opacity: 0.85; }
+.bubble.typing::after {
+  content: ' ';
+  display: inline-block;
+  width: 1ch;
+  animation: dots 1.2s infinite steps(4);
+}
+@keyframes dots {
+  0% { content: ''; }
+  25% { content: '.'; }
+  50% { content: '..'; }
+  75% { content: '...'; }
+  100% { content: ''; }
+}
+
+/* Input */
+.input-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-top: 1px solid rgba(255,255,255,.08);
+  background: #141414;
+}
+.input-row input {
+  background: #1a1a1a; color: #eee; border: 1px solid rgba(255,255,255,.12);
+  border-radius: 10px; padding: 0.6rem 0.75rem; outline: none; font-family: inherit;
+}
+.input-row input::placeholder { color: #9aa0a6; }
+.input-row .send {
+  min-width: 44px; background: #2b4cff; color: #fff; border: none; border-radius: 10px; cursor: pointer; transition: transform .06s ease;
+}
+.input-row .send:active { transform: translateY(1px); }
+
+/* Temas por personalidad (acento visual) */
+.chat-ia-window.romantico .msg.assistant .bubble { border-color: rgba(255,182,193,.35); box-shadow: 0 0 0 1px rgba(255,182,193,.08) inset; }
+.chat-ia-window.romantico .input-row .send { background: #ff7db1; }
+
+.chat-ia-window.editorial .msg.assistant .bubble { font-family: Georgia, 'Times New Roman', serif; }
+.chat-ia-window.editorial .input-row .send { background: #444; }
+
+.chat-ia-window.comercial .msg.assistant .bubble { border-color: rgba(43,76,255,.35); }
+.chat-ia-window.comercial .input-row .send { background: #2b4cff; }
+>>>>>>> master
