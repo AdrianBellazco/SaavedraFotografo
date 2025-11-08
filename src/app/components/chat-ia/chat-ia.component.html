@@ -1,0 +1,32 @@
+<!-- src/app/components/chat-ia/chat-ia.component.html -->
+<div class="chat-ia-window" [class.open]="mostrarChat" [ngClass]="persona">
+  <div class="header">
+    <h3 class="title">Chat IA · Lumi</h3>
+    <div class="actions">
+      <button type="button" class="toggle" (click)="toggleChat()">
+        {{ mostrarChat ? '–' : '+' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="log">
+    <ng-container *ngFor="let m of visibleMessages">
+      <div class="msg" [class.user]="m.role === 'user'" [class.assistant]="m.role === 'assistant'">
+        <div class="bubble" [ngClass]="{'typing': m.content.includes('Lumi está escribiendo…')}">
+          {{ m.content }}
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <div class="input-row">
+    <input
+      type="text"
+      [(ngModel)]="input"
+      [disabled]="loading"
+      placeholder="Escribe tu idea o usa /modo ventas · /modo asesor · /personalidad romantico|editorial|comercial|neutral · /reset"
+      (keyup.enter)="send()"
+    />
+    <button type="button" class="send" (click)="send()" [disabled]="loading" aria-label="Enviar">➤</button>
+  </div>
+</div>

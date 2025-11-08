@@ -1,0 +1,62 @@
+<div class="analyzer-container">
+  <h2>🔍 Analizador de Cliente Fotográfico</h2>
+  <p class="intro">
+    Pega la descripción del cliente y obtén recomendaciones automáticas de sesión fotográfica.
+  </p>
+
+  <textarea
+    [(ngModel)]="description"
+    rows="6"
+    placeholder="Ej.: Pareja joven que quiere una sesión urbana nocturna con luces de ciudad, estilo editorial, ropa casual monocromática.">
+  </textarea>
+
+  <button (click)="analyze()" [disabled]="loading || !description.trim()">
+    {{ loading ? 'Analizando…' : 'Analizar descripción' }}
+  </button>
+
+  <div *ngIf="errorMsg" class="error">{{ errorMsg }}</div>
+
+  <!-- Tomamos result como r, y luego bifurcamos por tipo -->
+  <ng-container *ngIf="result as r">
+
+    <!-- Caso JSON estructurado -->
+    <div *ngIf="isJson(r); else textoPlano" class="result">
+      <h3>📸 Resultado del análisis</h3>
+
+      <div *ngIf="asAny(r).tipoSesion">
+        <strong>Tipo de sesión:</strong> {{ asAny(r).tipoSesion }}
+      </div>
+
+      <div *ngIf="asAny(r).locaciones?.length">
+        <strong>Locaciones sugeridas:</strong>
+        <ul>
+          <li *ngFor="let l of asAny(r).locaciones">{{ l }}</li>
+        </ul>
+      </div>
+
+      <div *ngIf="asAny(r).vestuario?.length">
+        <strong>Vestuario recomendado:</strong>
+        <ul>
+          <li *ngFor="let v of asAny(r).vestuario">{{ v }}</li>
+        </ul>
+      </div>
+
+      <div *ngIf="asAny(r).estilo">
+        <strong>Estilo visual sugerido:</strong> {{ asAny(r).estilo }}
+      </div>
+
+      <div *ngIf="asAny(r).lente">
+        <strong>Lente y configuración:</strong> {{ asAny(r).lente }}
+      </div>
+    </div>
+
+    <!-- Fallback: texto plano -->
+    <ng-template #textoPlano>
+      <div class="result">
+        <h3>📄 Respuesta de la IA</h3>
+        <pre>{{ asAny(r).texto }}</pre>
+      </div>
+    </ng-template>
+
+  </ng-container>
+</div>
