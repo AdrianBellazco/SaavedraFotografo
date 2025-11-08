@@ -36,4 +36,11 @@ export const routes: Routes = [
         (m) => m.CarritoComponent
       ),
   },
+  {
+    path: 'calendario',
+    loadComponent: () =>
+      import('./pages/calendario/calendario.component').then(
+        (m) => m.CalendarioComponent
+      ),
+  },
 ];
