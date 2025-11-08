@@ -37,7 +37,7 @@ export class CatalogoComponent {
         '• 20 tomas digitales\n' +
         '• postproducción completa y colonización\n' +
         '• valor: 300.000',
-      imagen: 'assets/bodas/por-fotos/estandar-20.jpg',
+      imagen: 'assets/fotos-boda/estandar/estandar.jpg',
       precio: 300000
     },
     {
