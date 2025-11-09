@@ -1,0 +1,63 @@
+.analyzer-container {
+  max-width: 650px;
+  margin: 20px auto;
+  background: #121212;
+  color: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.4);
+}
+
+.analyzer-container h2 {
+  color: #00e0b0;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.intro {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #aaa;
+  margin-bottom: 10px;
+}
+
+textarea {
+  width: 100%;
+  background: #1f1f1f;
+  border: 1px solid #333;
+  color: #fff;
+  border-radius: 8px;
+  padding: 10px;
+  resize: vertical;
+  margin-bottom: 10px;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background: #00e0b0;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.result {
+  background: #1e1e1e;
+  margin-top: 15px;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.error {
+  color: #ff4f4f;
+  text-align: center;
+  margin-top: 10px;
+}

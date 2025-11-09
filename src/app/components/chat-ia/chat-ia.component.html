@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!-- Botón flotante -->
 <div class="chat-ia-button" (click)="toggleChat()">
    <img src="assets/chatbot.png" alt="Chat IA" class="chat-ia-icon" />
@@ -22,5 +23,37 @@
     <button style="border: none; background: #00e0b8; color: white; padding: 10px 15px; cursor: pointer;">
       ➤
     </button>
+=======
+<!-- src/app/components/chat-ia/chat-ia.component.html -->
+<div class="chat-ia-window" [class.open]="mostrarChat" [ngClass]="persona">
+  <div class="header">
+    <h3 class="title">Chat IA · Lumi</h3>
+    <div class="actions">
+      <button type="button" class="toggle" (click)="toggleChat()">
+        {{ mostrarChat ? '–' : '+' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="log">
+    <ng-container *ngFor="let m of visibleMessages">
+      <div class="msg" [class.user]="m.role === 'user'" [class.assistant]="m.role === 'assistant'">
+        <div class="bubble" [ngClass]="{'typing': m.content.includes('Lumi está escribiendo…')}">
+          {{ m.content }}
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <div class="input-row">
+    <input
+      type="text"
+      [(ngModel)]="input"
+      [disabled]="loading"
+      placeholder="Habla con Lumi..."
+      (keyup.enter)="send()"
+    />
+    <button type="button" class="send" (click)="send()" [disabled]="loading" aria-label="Enviar">➤</button>
+>>>>>>> master
   </div>
 </div>

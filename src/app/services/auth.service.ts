@@ -1,11 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+<<<<<<< HEAD
 import { BehaviorSubject, Observable, tap } from 'rxjs';
+=======
+import { Observable } from 'rxjs';
+>>>>>>> master
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private apiUrl = 'http://localhost:8080/api/auth';
 
+<<<<<<< HEAD
   // 🔹 Control del estado de autenticación
   private isLoggedInSubject = new BehaviorSubject<boolean>(false);
   isLoggedIn$ = this.isLoggedInSubject.asObservable();
@@ -96,3 +101,15 @@ register(user: any): Observable<any> {
 
 
 
+=======
+  constructor(private http: HttpClient) {}
+
+  register(user: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/register`, user);
+  }
+
+  login(credentials: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/login`, credentials);
+  }
+}
+>>>>>>> master
