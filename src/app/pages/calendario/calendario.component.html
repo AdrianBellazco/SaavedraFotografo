@@ -1,8 +1,19 @@
 <div class="calendario-container">
-  <h1 class="titulo">Consultar Disponibilidad</h1>
-  <p class="subtitulo">Verifica qué fechas están disponibles para tus sesiones</p>
+  <h1 class="titulo">Agenda tu cita</h1>
+  <p class="subtitulo">Selecciona una fecha disponible y confirma tu reserva</p>
 
   <div class="calendario-wrapper">
-    <full-calendar [options]="calendarOptions"></full-calendar>
+  <full-calendar [options]="calendarOptions"></full-calendar>
   </div>
+
+  <div class="seleccion-fecha" *ngIf="sessionId && !alreadyBooked">
+    <label>Fecha seleccionada: <strong>{{ selectedDate || 'Ninguna' }}</strong></label>
+    <div class="time-row">
+      <label>Hora: <input type="time" [(ngModel)]="selectedTime" name="selectedTime" /></label>
+      <button class="btn-comprar" (click)="confirmarReserva()" [disabled]="!selectedDate || !selectedTime">Confirmar reserva</button>
+    </div>
+  </div>
+  <div *ngIf="alreadyBooked" class="ya-reservado">Esta compra ya tiene una reserva registrada.</div>
+
+  <p class="mensaje" *ngIf="message">{{ message }}</p>
 </div>

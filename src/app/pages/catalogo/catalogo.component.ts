@@ -1,5 +1,5 @@
-import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CarritoService } from '../../services/carrito.service';
@@ -534,14 +534,7 @@ export class CatalogoComponent {
   }
 
   agregarAlCarrito(s: Servicio) {
-    if (!this.authService.isAuthenticated()) {
-      // 🚫 Si no hay sesión → guardar intento y redirigir a login
-      this.authService.setPendingRedirect('/catalogo', s);
-      this.router.navigate(['/login']);
-      return;
-    }
-
-    // ✅ Si hay sesión → añadir al carrito
+    // Permitir añadir al carrito sin exigir autenticación; se solicitará en pago si aplica
     this.carritoService.agregarAlCarrito(s);
     this.cerrarModal();
     alert('✅ Paquete añadido al carrito');

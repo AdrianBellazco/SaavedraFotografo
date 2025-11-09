@@ -2,7 +2,9 @@
 <h1 class="titulo">Tu Carrito de Compras</h1>
 <div class="resumen-compra">
 <p class="total">Total: <span>${{ total | number:'1.2-2' }}</span></p>
-<button class="btn-comprar-todo">Comprar Todo</button>
+<button class="btn-comprar-todo" (click)="pagarCheckout()" [disabled]="paying || total<=0">
+	{{ paying ? 'Procesando...' : 'Pagar con tarjeta' }}
+</button>
 </div>
 
 
@@ -26,6 +28,10 @@
 <a routerLink="/catalogo" class="volver">Volver al catálogo</a>
 </div>
 </div>
+
+<!-- Mensaje del proceso de pago -->
+<p style="margin-top:12px;" *ngIf="paymentMessage">{{ paymentMessage }}</p>
+
+<!-- La reserva se realiza en la página de calendario tras el pago -->
 </div>
-<!-- 
--->
+<!-- Stripe integrado -->
