@@ -40,3 +40,9 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Environment files
+# Never commit real secrets. Keep an example file only.
+.env
+.env.*
+!.env.example
