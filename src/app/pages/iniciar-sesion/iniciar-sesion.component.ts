@@ -5,10 +5,6 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 declare const google: any;
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { AuthService } from '../../services/auth.service'; // ajusta la ruta según tu estructura
 
 @Component({
   selector: 'app-iniciar-sesion',
@@ -43,7 +39,7 @@ export class IniciarSesionComponent implements AfterViewInit {
           { theme: 'outline', size: 'large', shape: 'pill', text: 'signin_with' }
         );
       } else {
-        console.error('⚠️ Google Identity Services no se ha cargado.');
+        console.error('⚠ Google Identity Services no se ha cargado.');
       }
     } catch (err) {
       console.error('Error al cargar el script de Google:', err);
@@ -128,56 +124,4 @@ export class IniciarSesionComponent implements AfterViewInit {
     // Redirige al usuario a donde estaba
     this.router.navigateByUrl(returnUrl || '/catalogo');
   }
-  styleUrl: './iniciar-sesion.component.css'
-})
-export class IniciarSesionComponent {
-
-registro = {
-  name: '',
-  email: '',
-  password: ''
-};
-
-
-login = {
-  email: '',
-  password: ''
-};
-
-
-  mensaje: string = '';
-  esError: boolean = false;
-
-  constructor(private authService: AuthService) {}
-
-registrar() {
-  this.authService.register(this.registro).subscribe({
-    next: (respuesta) => {
-      console.log('✅ Registro exitoso:', respuesta);
-      this.mensaje = 'Usuario registrado correctamente.';
-      this.esError = false;
-    },
-    error: (error) => {
-      console.error('❌ Error al registrar:', error);
-      this.mensaje = error.status === 409 ? '⚠️ El correo ya está registrado.' : 'Ocurrió un error al registrar.';
-      this.esError = true;
-    }
-  });
-}
-
-iniciarSesion() {
-  this.authService.login(this.login).subscribe({
-    next: (respuesta) => {
-      console.log('✅ Sesión iniciada:', respuesta);
-      this.mensaje = 'Inicio de sesión exitoso.';
-      this.esError = false;
-    },
-    error: (error) => {
-      console.error('❌ Error al iniciar sesión:', error);
-      this.mensaje = 'Correo o contraseña incorrectos.';
-      this.esError = true;
-    }
-  });
-}
-
 }

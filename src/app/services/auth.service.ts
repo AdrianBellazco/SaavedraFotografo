@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -20,7 +19,7 @@ export class AuthService {
   // 🔹 Registro de usuario
 // 🔹 Registro de usuario
 register(user: any): Observable<any> {
-  return this.http.post<{ token?: string }>(`${this.apiUrl}/register`, user).pipe(
+  return this.http.post<{ token?: string }>(${this.apiUrl}/register, user).pipe(
     tap((response) => {
       // Si el backend devuelve un token, lo guardamos
       if (response && response.token) {
@@ -35,7 +34,7 @@ register(user: any): Observable<any> {
 
   // 🔹 Inicio de sesión
   login(credentials: any): Observable<any> {
-    return this.http.post<{ token: string }>(`${this.apiUrl}/login`, credentials).pipe(
+    return this.http.post<{ token: string }>(${this.apiUrl}/login, credentials).pipe(
       tap((response) => {
         if (response && response.token) {
           localStorage.setItem('token', response.token);
@@ -90,20 +89,5 @@ register(user: any): Observable<any> {
   clearPendingRedirect(): void {
     localStorage.removeItem('returnUrl');
     localStorage.removeItem('pendingService');
-  }
-}
-
-
-
-
-
-  constructor(private http: HttpClient) {}
-
-  register(user: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, user);
-  }
-
-  login(credentials: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, credentials);
   }
 }
