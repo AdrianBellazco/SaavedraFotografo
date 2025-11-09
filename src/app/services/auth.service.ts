@@ -17,24 +17,22 @@ export class AuthService {
   }
 
   // 🔹 Registro de usuario
-// 🔹 Registro de usuario
-register(user: any): Observable<any> {
-  return this.http.post<{ token?: string }>(${this.apiUrl}/register, user).pipe(
-    tap((response) => {
-      // Si el backend devuelve un token, lo guardamos
-      if (response && response.token) {
-        localStorage.setItem('token', response.token);
-      }
-      // ✅ Activar sesión de inmediato
-      this.isLoggedInSubject.next(true);
-    })
-  );
-}
-
+  register(user: any): Observable<any> {
+    return this.http.post<{ token?: string }>(`${this.apiUrl}/register`, user).pipe(
+      tap((response) => {
+        // Si el backend devuelve un token, lo guardamos
+        if (response && response.token) {
+          localStorage.setItem('token', response.token);
+        }
+        // ✅ Activar sesión de inmediato
+        this.isLoggedInSubject.next(true);
+      })
+    );
+  }
 
   // 🔹 Inicio de sesión
   login(credentials: any): Observable<any> {
-    return this.http.post<{ token: string }>(${this.apiUrl}/login, credentials).pipe(
+    return this.http.post<{ token: string }>(`${this.apiUrl}/login`, credentials).pipe(
       tap((response) => {
         if (response && response.token) {
           localStorage.setItem('token', response.token);
@@ -59,8 +57,6 @@ register(user: any): Observable<any> {
   isAuthenticated(): boolean {
     return this.isLoggedInSubject.value;
   }
-
-
 
   // ===========================================================
   // 🧠 NUEVAS FUNCIONALIDADES PARA REDIRECCIÓN AUTOMÁTICA
