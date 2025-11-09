@@ -1,11 +1,14 @@
 // src/app/components/chat-ia/chat-ia.component.ts
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AiService } from '../../ai/ai.service';
 import { AiMessage } from '../../ai/ai.models';
 import { buildSystemPrompt } from '../../ai/ai.config';
 import { BRAND } from '../../ai/brand.config';
+
+// -------------------- NUEVO: storage para UI --------------------
+const LUMI_UI_STORAGE = 'lumi-ui-state-v1';
 
 // Tipos locales
 type Modo = 'asesor' | 'ventas';
@@ -25,10 +28,16 @@ function saludoInicial(): string {
   templateUrl: './chat-ia.component.html',
   styleUrls: ['./chat-ia.component.css']
 })
-export class ChatIaComponent {
+export class ChatIaComponent implements OnInit {
   private ai = inject(AiService);
 
+  // Mantén tu flag original para abrir/cerrar el widget completo
   mostrarChat = false;
+
+  // -------------------- NUEVO: estado de minimizado --------------------
+  // Minimiza SOLO el cuerpo del chat sin destruir el DOM (historial intacto).
+  minimized = false;
+
   input = '';
   loading = false;
 
@@ -49,8 +58,43 @@ export class ChatIaComponent {
     return this.messages.filter(m => m.role !== 'system');
   }
 
+  // -------------------------------------------------------------------
+  // Ciclo de vida
+  // -------------------------------------------------------------------
+  ngOnInit(): void {
+    this.restoreUi(); // ← restaura el estado de minimizado si existía
+  }
+
+  // Abrir/cerrar el widget (tu lógica original)
   toggleChat() { this.mostrarChat = !this.mostrarChat; }
 
+  // -------------------- NUEVO: toggle de minimizar --------------------
+  toggleMinimize(): void {
+    this.minimized = !this.minimized;
+    this.persistUi();
+  }
+
+  // -------------------- NUEVO: persistencia de UI ---------------------
+  private persistUi(): void {
+    try {
+      localStorage.setItem(LUMI_UI_STORAGE, JSON.stringify({
+        minimized: this.minimized
+      }));
+    } catch { /* noop */ }
+  }
+
+  private restoreUi(): void {
+    try {
+      const raw = localStorage.getItem(LUMI_UI_STORAGE);
+      if (!raw) return;
+      const s = JSON.parse(raw);
+      this.minimized = !!s?.minimized;
+    } catch { /* noop */ }
+  }
+
+  // -------------------------------------------------------------------
+  // Personalización (igual que tu versión)
+  // -------------------------------------------------------------------
   private applyMode(newMode: Modo) {
     this.modo = newMode;
     this.reseedConversation();
@@ -106,6 +150,9 @@ export class ChatIaComponent {
     return false;
   }
 
+  // -------------------------------------------------------------------
+  // Envío de mensajes (igual que tu versión)
+  // -------------------------------------------------------------------
   send() {
     const content = this.input.trim();
     if (!content || this.loading) return;
@@ -145,3 +192,4 @@ export class ChatIaComponent {
     if (el) el.scrollTop = el.scrollHeight;
   }
 }
+

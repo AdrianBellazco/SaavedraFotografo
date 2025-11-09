@@ -36,6 +36,12 @@
   border-radius: 8px; width: 32px; height: 28px; cursor: pointer;
 }
 
+/* NUEVO: botón minimizar con el mismo look que el toggle */
+.minimize {
+  background: #2a2a2a; color: #eee; border: 1px solid rgba(255,255,255,.12);
+  border-radius: 8px; width: 32px; height: 28px; cursor: pointer; margin-left: .35rem;
+}
+
 /* Log */
 .log {
   padding: 0.75rem;
@@ -45,6 +51,19 @@
   gap: 0.5rem;
   scrollbar-width: thin;
   max-height: calc(70vh - 120px);
+
+  /* NUEVO: transiciones suaves para colapsar */
+  transition: max-height .25s ease, opacity .2s ease, padding .2s ease;
+}
+
+/* NUEVO: colapsar sin destruir el DOM */
+.log.is-hidden {
+  max-height: 0 !important;
+  opacity: 0;
+  overflow: hidden;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  pointer-events: none;
 }
 
 /* Mensajes */
@@ -98,7 +117,22 @@
   padding: 0.75rem;
   border-top: 1px solid rgba(255,255,255,.08);
   background: #141414;
+
+  /* NUEVO: transiciones para colapsar */
+  transition: max-height .25s ease, opacity .2s ease, padding .2s ease, border-color .2s ease;
 }
+
+/* NUEVO: colapsar la fila de input */
+.input-row.is-hidden {
+  max-height: 0 !important;
+  opacity: 0;
+  overflow: hidden;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  border-top-color: transparent;
+  pointer-events: none;
+}
+
 .input-row input {
   background: #1a1a1a; color: #eee; border: 1px solid rgba(255,255,255,.12);
   border-radius: 10px; padding: 0.6rem 0.75rem; outline: none; font-family: inherit;

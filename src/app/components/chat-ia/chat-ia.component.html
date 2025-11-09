@@ -3,13 +3,32 @@
   <div class="header">
     <h3 class="title">Chat IA · Lumi</h3>
     <div class="actions">
+      <!-- Botón existente: abre/cierra todo el widget -->
       <button type="button" class="toggle" (click)="toggleChat()">
         {{ mostrarChat ? '–' : '+' }}
+      </button>
+
+      <!-- NUEVO: botón de minimizar SOLO el cuerpo del chat -->
+      <button
+        type="button"
+        class="minimize"
+        (click)="toggleMinimize()"
+        [attr.aria-expanded]="!minimized"
+        [attr.aria-label]="minimized ? 'Abrir chat' : 'Minimizar chat'"
+        title="{{ minimized ? 'Abrir' : 'Minimizar' }}"
+      >
+        <span *ngIf="!minimized">▁</span>
+        <span *ngIf="minimized">▣</span>
       </button>
     </div>
   </div>
 
-  <div class="log">
+  <!-- Cuerpo del chat: se oculta sin destruir (NO *ngIf) -->
+  <div
+    class="log"
+    [class.is-hidden]="minimized"
+    [attr.aria-hidden]="minimized"
+  >
     <ng-container *ngFor="let m of visibleMessages">
       <div class="msg" [class.user]="m.role === 'user'" [class.assistant]="m.role === 'assistant'">
         <div class="bubble" [ngClass]="{'typing': m.content.includes('Lumi está escribiendo…')}">
@@ -19,7 +38,11 @@
     </ng-container>
   </div>
 
-  <div class="input-row">
+  <div
+    class="input-row"
+    [class.is-hidden]="minimized"
+    [attr.aria-hidden]="minimized"
+  >
     <input
       type="text"
       [(ngModel)]="input"
