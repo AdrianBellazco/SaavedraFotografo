@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-=======
 // src/app/components/chat-ia/chat-ia.component.ts
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -22,26 +17,15 @@ function saludoInicial(): string {
   if (hora < 19) return `🌇 ¡Buenas tardes! Soy Lumi, asistente virtual de ${BRAND.nombre}. Cuéntame tu idea (fecha/lugar, estilo y presupuesto) y te ayudo a armar la mejor opción.`;
   return `🌙 ¡Buenas noches! Soy Lumi, asistente virtual de ${BRAND.nombre}. ¿Qué te gustaría crear? (fecha/lugar, estilo y presupuesto)`;
 }
->>>>>>> master
 
 @Component({
   selector: 'app-chat-ia',
   standalone: true,
-<<<<<<< HEAD
-  imports: [CommonModule],
-=======
   imports: [CommonModule, FormsModule],
->>>>>>> master
   templateUrl: './chat-ia.component.html',
   styleUrls: ['./chat-ia.component.css']
 })
 export class ChatIaComponent {
-<<<<<<< HEAD
-  mostrarChat = false;
-
-  toggleChat() {
-    this.mostrarChat = !this.mostrarChat;
-=======
   private ai = inject(AiService);
 
   mostrarChat = false;
@@ -159,6 +143,5 @@ export class ChatIaComponent {
   private scrollToBottom() {
     const el = document.querySelector('.chat-ia-window .log') as HTMLElement | null;
     if (el) el.scrollTop = el.scrollHeight;
->>>>>>> master
   }
 }

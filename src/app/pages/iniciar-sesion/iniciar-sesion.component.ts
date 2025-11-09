@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -6,19 +5,16 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 declare const google: any;
-=======
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service'; // ajusta la ruta según tu estructura
->>>>>>> master
 
 @Component({
   selector: 'app-iniciar-sesion',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './iniciar-sesion.component.html',
-<<<<<<< HEAD
   styleUrls: ['./iniciar-sesion.component.css']
 })
 export class IniciarSesionComponent implements AfterViewInit {
@@ -132,7 +128,6 @@ export class IniciarSesionComponent implements AfterViewInit {
     // Redirige al usuario a donde estaba
     this.router.navigateByUrl(returnUrl || '/catalogo');
   }
-=======
   styleUrl: './iniciar-sesion.component.css'
 })
 export class IniciarSesionComponent {
@@ -185,5 +180,4 @@ iniciarSesion() {
   });
 }
 
->>>>>>> master
 }
