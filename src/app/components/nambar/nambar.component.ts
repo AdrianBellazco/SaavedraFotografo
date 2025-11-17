@@ -16,17 +16,13 @@ export class NambarComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
-    // Escucha los cambios en el estado del login
     this.authService.isLoggedIn$.subscribe(status => {
       this.isLoggedIn = status;
     });
   }
 
   logout() {
-    // Cierra sesión
     this.authService.logout();
-
-    // Redirige a la página principal
     this.router.navigate(['/']);
   }
 }

@@ -5,7 +5,7 @@
       <!-- LOGO IZQUIERDA -->
       <img src="/assets/adrian.png" width="120px" class="logo py-2" />
 
-      <!-- BOTÓN TOGGLER (MODO RESPONSIVE) -->
+      <!-- BOTÓN TOGGLER (RESPONSIVE) -->
       <button
         class="navbar-toggler"
         type="button"
@@ -21,54 +21,63 @@
       <!-- ENLACES CENTRADOS -->
       <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
         <ul class="navbar-nav">
-          <li class="nav-item me-3">
-            <a class="nav-link active" routerLink="/" routerLinkActive="active"
-              >Inicio</a
-            >
-          </li>
-          <li class="nav-item me-3">
-            <a class="nav-link" routerLink="/catalogo" routerLinkActive="active"
-              >Servicios</a
-            >
-
-          <li class="nav-item me-3">
-              <a class="nav-link" routerLink="/calendario" routerLinkActive="active">
-               Consultar fecha
-               </a>
-          </li>
-
-
           
           <li class="nav-item me-3">
-            <a class="nav-link">Nosotros como empresa</a>
+            <a
+              class="nav-link"
+              routerLink="/"
+              routerLinkActive="active-link"
+              [routerLinkActiveOptions]="{ exact: true }"
+            >
+              Inicio
+            </a>
+          </li>
+
+          <li class="nav-item me-3">
+            <a
+              class="nav-link"
+              routerLink="/catalogo"
+              routerLinkActive="active-link"
+            >
+              Servicios
+            </a>
+          </li>
+
+          <li class="nav-item me-3">
+            <a
+              class="nav-link"
+              routerLink="/calendario"
+              routerLinkActive="active-link"
+            >
+              Consultar fecha
+            </a>
           </li>
         </ul>
       </div>
 
-     <!-- ICONOS DERECHA -->
-<div class="d-flex align-items-center gap-3">
+      <!-- ICONOS DERECHA -->
+      <div class="d-flex align-items-center gap-3">
 
-  <!-- BOTÓN CARRITO (solo visible si hay sesión iniciada) -->
-  <ng-container *ngIf="isLoggedIn">
-    <a routerLink="/carrito" class="text-white text-decoration-none">
-      <i class="bi bi-cart4 fs-4"></i>
-    </a>
-  </ng-container>
+        <!-- CARRITO (si hay sesión) -->
+        <ng-container *ngIf="isLoggedIn">
+          <a routerLink="/carrito" class="text-white text-decoration-none">
+            <i class="bi bi-cart4 fs-4"></i>
+          </a>
+        </ng-container>
 
-  <!-- MENÚ USUARIO -->
-  <div class="user-menu position-relative">
-    <i class="bi bi-person-circle fs-4"></i>
-    <ul class="dropdown-menu-custom">
-      <!-- Mostrar 'Registro' solo si NO hay sesión -->
-      <li *ngIf="!isLoggedIn">
-        <a routerLink="/login">Registro</a>
-      </li>
-
-      <!-- Mostrar 'Cerrar sesión' solo si hay sesión -->
-      <li *ngIf="isLoggedIn">
-        <a (click)="logout()" class="text-danger">Cerrar sesión</a>
-      </li>
-    </ul>
-  </div>
-
-</div>
+        <!-- MENÚ USUARIO -->
+        <div class="user-menu position-relative">
+          <i class="bi bi-person-circle fs-4"></i>
+          <ul class="dropdown-menu-custom">
+            <li *ngIf="!isLoggedIn">
+              <a routerLink="/login">Registro</a>
+            </li>
+            <li *ngIf="isLoggedIn">
+              <a (click)="logout()" class="text-danger">Cerrar sesión</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+</body>

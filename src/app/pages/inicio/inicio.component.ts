@@ -6,10 +6,10 @@ import { CardsComponent } from '../../components/cards/cards.component';
 @Component({
   selector: 'app-inicio',
   standalone: true,
-  imports: [ NambarComponent, RuletaComponent, CardsComponent ],
+  imports: [NambarComponent, RuletaComponent, CardsComponent],
   templateUrl: './inicio.component.html',
-  styleUrl: './inicio.component.css'
+  styleUrls: ['./inicio.component.css']
 })
 export class InicioComponent {
-
+  currentYear: number = new Date().getFullYear();
 }
