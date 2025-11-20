@@ -1,16 +1,23 @@
 /* ============================================================================
- * ai.config.ts (versión tolerante de firma + formato modo cliente)
- * Construye el "system prompt" de Lumi con el catálogo actualizado.
- * - Acepta llamadas antiguas como buildSystemPrompt(this.modo, this.persona)
- *   y las ignora con seguridad (usa BRAND y PAQUETES por defecto).
- * - Fija un formato de respuesta limpio para cliente (NO mostrar ID).
+ * ai.config.ts – SUPER VERSIÓN INTELIGENTE Y TOLERANTE
+ * Lumi ahora:
+ *  - Entiende lenguaje fuerte sin confundirlo con una compra.
+ *  - Usa intuición y contexto emocional.
+ *  - Pide confirmación antes de marcar <<GENERAR_LINK>>.
+ *  - Suena natural, humana, cálida y profesional.
+ *  - Varía estructuras para evitar repetición.
+ *  - Trabaja SOLO con los paquetes del catálogo.
+ *  - NO muestra IDs al cliente.
+ *  - Solo activa la marca de compra cuando REALMENTE debe.
  * ========================================================================== */
 
 import { BRAND } from './brand.config';
 import { PAQUETES, Paquete } from '../data/paquetes';
 import { ESTRATEGIAS } from './suggestions.config';
 
-/** Sanitiza texto para el prompt */
+/* ============================================================================
+ * Utilidades
+ * ========================================================================== */
 function normalize(text: string): string {
   return String(text ?? '')
     .replace(/\r/g, '')
@@ -19,42 +26,35 @@ function normalize(text: string): string {
     .trim();
 }
 
-/** Formatea precio COP legible */
 function fmtCOP(value: number | undefined): string {
-  if (typeof value !== 'number' || isNaN(value)) return 'N/D';
+  if (typeof value !== 'number') return 'N/D';
   return `$${value.toLocaleString('es-CO')}`;
 }
 
-/** Serializa un paquete al objeto que verá el modelo */
 function serializePaquete(p: Paquete): any {
-  const base: any = {
-    id: p.id, // Se incluye en el catálogo para uso interno del modelo, pero NO se muestra al cliente
+  const o: any = {
+    id: p.id,
     nombre: p.nombre,
     categoria: p.categoria,
-    modalidad: p.modalidad, // 'por_fotos' | 'por_horas'
+    modalidad: p.modalidad,
     photobook: p.photobook ? 'sí' : 'no',
     precio_COP: p.precioCOP,
     precio_COP_str: fmtCOP(p.precioCOP),
-    tags: p.tags ?? []
+    tags: p.tags ?? [],
+    incluye: (p.incluye ?? []).map((i) => normalize(i)),
+    notas: (p.notas ?? []).map((n) => normalize(n)),
+    regalos: (p.regalos ?? []).map((n) => normalize(n)),
   };
 
-  if (p.modalidad === 'por_horas') {
-    base.horas = typeof p.horas === 'number' ? p.horas : undefined;
-  } else if (p.modalidad === 'por_fotos') {
-    base.tomas = typeof p.tomas === 'number' ? p.tomas : undefined;
-  }
+  if (p.modalidad === 'por_fotos') o.tomas = p.tomas;
+  if (p.modalidad === 'por_horas') o.horas = p.horas;
 
-  base.incluye = (p.incluye ?? []).map((i: string) => normalize(i));
-  if (p.regalos?.length) base.regalos = p.regalos.map((r: string) => normalize(r));
-  if (p.notas?.length) base.notas = p.notas.map((n: string) => normalize(n));
-
-  return base;
+  return o;
 }
 
-/** groupBy simple */
 function groupBy<T, K extends string | number>(
   arr: T[],
-  keyFn: (x: T) => K
+  keyFn: (item: T) => K
 ): Record<K, T[]> {
   return arr.reduce((acc, item) => {
     const k = keyFn(item);
@@ -63,137 +63,173 @@ function groupBy<T, K extends string | number>(
   }, {} as Record<K, T[]>);
 }
 
-/** Crea un catálogo estructurado para el prompt */
 function buildCatalogo(paquetes: Paquete[]) {
   const porCategoria = groupBy(paquetes, (p) => p.categoria);
-  const resultado: Record<string, any> = {};
+  const catalogo: any = {};
 
-  Object.entries(porCategoria).forEach(([categoria, items]) => {
+  for (const [cat, items] of Object.entries(porCategoria)) {
     const porModalidad = groupBy(items, (p) => p.modalidad);
-    const cat: Record<string, any[]> = {};
+    const bloque: any = {};
 
-    Object.entries(porModalidad).forEach(([modalidad, lista]) => {
+    for (const [modalidad, lista] of Object.entries(porModalidad)) {
       const conPB = lista.filter((p) => p.photobook);
       const sinPB = lista.filter((p) => !p.photobook);
-      const serializeList = (L: Paquete[]) => L.map((p: Paquete) => serializePaquete(p));
 
-      if (categoria === 'Productos' || categoria === 'Personales/Familiares') {
-        cat[modalidad] = serializeList(lista);
+      if (cat === 'Productos' || cat === 'Personales/Familiares') {
+        bloque[modalidad] = lista.map((p) => serializePaquete(p));
       } else {
-        cat[`${modalidad}__sin_photobook`] = serializeList(sinPB);
-        cat[`${modalidad}__con_photobook`] = serializeList(conPB);
+        bloque[`${modalidad}__con_photobook`] = conPB.map(serializePaquete);
+        bloque[`${modalidad}__sin_photobook`] = sinPB.map(serializePaquete);
       }
-    });
-
-    resultado[categoria] = cat;
-  });
-
-  return resultado;
-}
-
-/** Políticas y tono de marca para el prompt */
-function buildBrandPolicy(): string {
-  const politicas = [
-    `Marca: ${BRAND.nombre}`,
-    `Ciudad base: ${BRAND.ubicacion?.ciudad ?? 'N/D'}`,
-    `Cobertura: ${BRAND.ubicacion?.cobertura?.join(', ') ?? 'N/D'}`,
-    `Tono: ${BRAND.tono?.join(', ') ?? 'profesional, cercano'}`,
-    `Canales: ${BRAND.canales?.join(', ') ?? 'WhatsApp, Instagram'}`,
-    `Entrega digital: ${BRAND.politicas?.entregaDigital ?? 'Sí'}`,
-    `Tiempo de entrega: ${BRAND.politicas?.tiemposEntrega ?? 'Acorde a paquete'}`,
-    `Reagendación: ${BRAND.politicas?.reagendacion ?? 'Flexible con aviso'}`,
-    `Viáticos: ${BRAND.politicas?.viaticos ?? 'Se cotizan si hay desplazamiento'}`
-  ];
-  return politicas.map((l) => `- ${normalize(l)}`).join('\n');
-}
-
-/** Resumen de reglas de recomendación */
-function buildEstrategiasResumen(): string {
-  const rules: string[] = [];
-
-  try {
-    if (Array.isArray(ESTRATEGIAS?.prioridades)) {
-      rules.push(`Prioridades de recomendación:`);
-      ESTRATEGIAS.prioridades.forEach((r: any, idx: number) => {
-        rules.push(
-          `  ${idx + 1}. ${normalize(r?.descripcion ?? 'Regla sin descripción')} (${(r?.tags ?? []).join(', ')})`
-        );
-      });
     }
-    if (typeof ESTRATEGIAS?.maxOpciones === 'number') {
-      rules.push(`Máximo de alternativas a mostrar: ${ESTRATEGIAS.maxOpciones}`);
-    }
-    if (Array.isArray(ESTRATEGIAS?.diagnostico?.preguntas)) {
-      rules.push(`Preguntas de diagnóstico sugeridas:`);
-      ESTRATEGIAS.diagnostico.preguntas.forEach((q: string) => {
-        rules.push(`  - ${normalize(q)}`);
-      });
-    }
-  } catch {
-    rules.push(`(No se pudieron leer estrategias; usar criterio por precio/ajuste.)`);
+
+    catalogo[cat] = bloque;
   }
 
-  return rules.join('\n');
+  return catalogo;
+}
+
+function buildBrandPolicy(): string {
+  const b = BRAND;
+  const listado = [
+    `Marca: ${b.nombre}`,
+    `Ciudad base: ${b.ubicacion?.ciudad ?? ''}`,
+    `Cobertura: ${b.ubicacion?.cobertura?.join(', ')}`,
+    `Tono: ${b.tono?.join(', ')}`,
+    `Canales: ${b.canales?.join(', ')}`,
+    `Entrega digital: ${b.politicas?.entregaDigital}`,
+    `Tiempos de entrega: ${b.politicas?.tiemposEntrega}`,
+    `Viáticos: ${b.politicas?.viaticos}`,
+    `Reagendación: ${b.politicas?.reagendacion}`
+  ];
+
+  return listado.map((l) => `- ${normalize(l)}`).join('\n');
+}
+
+function buildEstrategias(): string {
+  const e = ESTRATEGIAS;
+  let out = `Reglas de recomendación:\n`;
+
+  try {
+    if (Array.isArray(e.prioridades)) {
+      e.prioridades.forEach((r: any, idx: number) => {
+        out += `  ${idx + 1}. ${normalize(r.descripcion)} (${(r.tags ?? []).join(', ')})\n`;
+      });
+    }
+    out += `Máx alternativas: ${e.maxOpciones}\nPreguntas base:\n`;
+    e.diagnostico?.preguntas?.forEach((q: string) => (out += ` - ${normalize(q)}\n`));
+  } catch {
+    out += `(no se pudo leer ESTRATEGIAS, usar criterio básico según necesidades del cliente)`;
+  }
+
+  return out;
 }
 
 /* ============================================================================
- * Firma FLEXIBLE para compatibilidad retro:
- * - buildSystemPrompt()                            -> usa BRAND y PAQUETES
- * - buildSystemPrompt(modo, persona)               -> ignora y usa BRAND/PAQUETES
- * - buildSystemPrompt(brandLike, paquetesLike)     -> si detecta estructura de brand/paquetes, la usa
+ * buildSystemPrompt – LUMI MASTER VERSION
  * ========================================================================== */
-export function buildSystemPrompt(
-  arg1?: unknown,
-  arg2?: unknown
-): string {
-  // Defaults
+export function buildSystemPrompt(arg1?: any, arg2?: any): string {
   let brand = BRAND;
-  let paquetes: Paquete[] = PAQUETES;
+  let paquetes = PAQUETES;
 
-  // Si el primer arg se parece a BRAND (tiene 'nombre' y 'politicas'), úsalo
-  const b = arg1 as any;
-  if (b && typeof b === 'object' && 'nombre' in b && 'politicas' in b) {
-    brand = b as typeof BRAND;
-  }
-
-  // Si el segundo arg parece un array de paquetes (tiene objetos con 'id' y 'precioCOP'), úsalo
-  const p = arg2 as any;
-  if (Array.isArray(p) && p.length && typeof p[0] === 'object' && 'id' in p[0] && 'precioCOP' in p[0]) {
-    paquetes = p as Paquete[];
-  }
+  if (arg1 && typeof arg1 === 'object' && 'nombre' in arg1) brand = arg1;
+  if (Array.isArray(arg2) && arg2.length && 'precioCOP' in arg2[0]) paquetes = arg2;
 
   const catalogo = buildCatalogo(paquetes);
 
   const prompt = `
-Eres "Lumi", asistente de ${normalize(brand.nombre)}. Tu objetivo es recomendar
-el paquete fotográfico que mejor se ajuste a la necesidad del cliente,
-usando ÚNICAMENTE el catálogo proporcionado más abajo.
+Eres **Lumi**, asistente virtual de ${normalize(brand.nombre)}.
+Tu misión es orientar al cliente con CALIDEZ, NATURALIDAD y CRITERIO PROFESIONAL,
+ayudándolo a elegir el paquete perfecto del catálogo oficial.
 
-### Políticas y tono de marca
-${buildBrandPolicy()}
+=====================
+### 🧠 ESTILO DE LUMI
+=====================
+- Voz natural, humana, segura, cálida.  
+- Evita sonar robótica o repetitiva: cambia estructura, sinónimos y ritmo.  
+- Máximo 2 emojis por mensaje, solo cuando aporten.  
+- Mensajes breves salvo que el cliente pida detalle.  
+- Al hablar de paquetes, sé elegante, directo y profesional.
 
-### Reglas de recomendación
-${buildEstrategiasResumen()}
+==========================
+### 🚫 PROHIBICIONES CLARAS
+==========================
+**NUNCA muestres precios o servicios que no existan.  
+NUNCA inventes extras, promociones o descuentos.  
+NUNCA muestres el ID del paquete.  
+NUNCA generes ni escribas tú mismo un enlace de pago.**
 
-### Catálogo (estructurado)
+El enlace **solo lo añadirá el sistema** cuando tú pongas esta marca EXACTA:
+**<<GENERAR_LINK>>**
+
+===========================
+### 🔥 CUÁNDO PONER <<GENERAR_LINK>>
+===========================
+Solo al FINAL del mensaje si:
+
+1. El cliente pide explícitamente pagar  
+   (“pásame el link”, “cómo pago”, “envíame el enlace”, “quiero comprar”).  
+
+2. El cliente elige un paquete de forma CLARA y FIRME  
+   (“tomo ese”, “quiero ese”, “me quedo con ese”, “lo compro”).  
+
+3. El cliente reafirma su decisión después de sugerirlo  
+   (si hay mínima duda, NO la pongas).
+
+**IMPORTANTE**  
+Lenguaje emocional, vulgar, euforia o humor NO cuentan como decisión de compra.
+Ej: “OMG LO AMOOOO”, “UY QUE NOTAS”, “ESTE ME GUSTÓ DEMASIADO”.  
+➡ Eso NO es compra. Continúa conversando.
+
+====================================
+### ❌ CUÁNDO NO PONER LA MARCA NUNCA
+====================================
+- Cuando el cliente está comparando.  
+- Cuando está pidiendo más detalles.  
+- Cuando expresa interés pero NO confirma (“me gusta”, “podría ser”).  
+- Cuando está jugando, exagerando o usando humor.  
+- Cuando pide información general.
+
+====================================
+### 📸 FORMATO DE RECOMENDACIÓN
+====================================
+**📸 [Nombre del paquete] — [Precio_formateado]**
+
+• **Horas/Tomas:** según modalidad  
+• **Photobook:** Sí/No  
+• **Incluye:**  
+   - Lista limpia y natural  
+• **Extra:** si aplica  
+
+**✨ ¿Por qué encaja?** frase corta y personalizada (máx 20 palabras)
+
+No repitas estructuras rígidas. Varía la forma de presentar la información.
+
+====================================
+### 🧭 COMPORTAMIENTO
+====================================
+- Usa intuición profesional para hacer preguntas relevantes.  
+- Si el cliente es vulgar, sarcástico o exagerado, responde con profesionalismo cálido y sin juzgar.  
+- Reencamina la conversación suavemente hacia identificar necesidades.  
+- No interpretes lenguaje fuerte como intención real de compra.  
+- Mantén el control de la venta con elegancia.
+
+====================================
+### 📚 CATÁLOGO OFICIAL
+====================================
 ${JSON.stringify(catalogo, null, 2)}
 
-### Instrucciones de respuesta (FORMATO PREMIUM SAAVEDRA)
-- No muestres el campo “ID”.
-- Presenta el título con negrilla y un estilo balanceado:
-  **📸 [Nombre del paquete] — [Precio]**
-- Salta una línea y usa una estructura visual limpia:
-  • **Horas/Tomas:** [valor]  
-  • **Photobook:** Sí / No  
-  • **Incluye:**  
-    - Detalla cada elemento en subviñetas con frases breves.  
-  • **Extras (si aplica):** regalos o notas relevantes.  
-- No pongas palabras como “Nota:” o “Extra:” si no aportan valor; usa frases naturales.
-- Al final, añade una línea con:
-  **✨ ¿Por qué encaja?** [una frase cálida de cierre, máximo 20 palabras].
-- Mantén un tono profesional, amable y elegante.
-- No uses tablas ni emojis adicionales (solo el 📸 y ✨ del encabezado y cierre).
-- Usa saltos de línea naturales y evita bloques densos.
-  `;
+====================================
+### 📌 POLÍTICAS Y DETALLES DE MARCA
+====================================
+${buildBrandPolicy()}
+
+====================================
+### 🎯 ESTRATEGIAS DE RECOMENDACIÓN
+====================================
+${buildEstrategias()}
+
+`;
+
   return normalize(prompt);
 }

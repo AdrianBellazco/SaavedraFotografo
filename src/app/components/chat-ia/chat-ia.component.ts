@@ -6,6 +6,8 @@ import { AiService } from '../../ai/ai.service';
 import { AiMessage } from '../../ai/ai.models';
 import { buildSystemPrompt } from '../../ai/ai.config';
 import { BRAND } from '../../ai/brand.config';
+import { AutolinkPipe } from '../../pipes/autolink.pipe';
+
 
 // -------------------- NUEVO: storage para UI --------------------
 const LUMI_UI_STORAGE = 'lumi-ui-state-v1';
@@ -24,7 +26,7 @@ function saludoInicial(): string {
 @Component({
   selector: 'app-chat-ia',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AutolinkPipe],
   templateUrl: './chat-ia.component.html',
   styleUrls: ['./chat-ia.component.css']
 })

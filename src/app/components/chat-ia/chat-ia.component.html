@@ -32,7 +32,7 @@
     <ng-container *ngFor="let m of visibleMessages">
       <div class="msg" [class.user]="m.role === 'user'" [class.assistant]="m.role === 'assistant'">
         <div class="bubble" [ngClass]="{'typing': m.content.includes('Lumi está escribiendo…')}">
-          {{ m.content }}
+       <div class="bubble" [innerHTML]="m.content | autolink"></div>
         </div>
       </div>
     </ng-container>
